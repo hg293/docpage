@@ -1006,6 +1006,17 @@ function PaymentsTab({form,updateForm,saveToFirestore,saving}){
 }
 
 // ─── DOCTOR SITE (Generated) ────────────────────────────────
+const DEMO_DOC = {
+  name:'Dr. Namratha G',qualifications:['MBBS','MD'],specialization:'Dermatologist',
+  clinicName:'Kaya Clinic',city:'Bangalore',state:'Karnataka',
+  phone:'8095320110',email:'gsnam96@gmail.com',
+  hours:'Mon-Sat: 10 AM - 6 PM',languages:['English','Kannada','Telugu','Hindi'],
+  services:['Acne Treatment','Laser Hair Removal','Chemical Peel','PRP Therapy','Botox & Fillers','Dermoscopy','Vitiligo Treatment','Scar Treatment'],
+  bio:'Dr. Namratha G is a qualified dermatologist with extensive training in clinical, surgical, and aesthetic dermatology. IADVL member with 3 peer-reviewed publications.',
+  experience:'7',consultFee:'800',followupFee:'500',
+  template:'botanical',slug:'demo',published:true,uid:'demo',registration:'KMC/XXXXX'
+};
+
 function DoctorSite({slug}){
   const [doc,setDoc]=useState(null);
   const [loading,setLoading]=useState(true);
@@ -1013,6 +1024,7 @@ function DoctorSite({slug}){
   const [showPay,setShowPay]=useState(false);
 
   useEffect(()=>{
+    if(slug==='demo'){setDoc(DEMO_DOC);setLoading(false);return}
     db.collection('docpages').where('slug','==',slug).where('published','==',true)
       .limit(1).get().then(snap=>{
         if(!snap.empty)setDoc(snap.docs[0].data());
@@ -1089,12 +1101,12 @@ function DoctorSite({slug}){
             (doc.qualifications||[]).join(', ')),
           h('p',{className:'doc-bio'},doc.bio||'Experienced medical professional providing comprehensive patient care.'),
           h('div',{className:'doc-stats'},
-            doc.experience&&{n:doc.experience+'+',l:'Years Experience'},
+            [doc.experience&&{n:doc.experience+'+',l:'Years Experience'},
             doc.services&&{n:doc.services.length,l:'Services'},
             doc.languages&&{n:doc.languages.length,l:'Languages'}
-          ).filter(Boolean).map((s,i)=>h('div',{key:i},
-            h('div',{className:'doc-stat-num',style:{color:accent}},s.n),
-            h('div',{className:'doc-stat-label'},s.l))),
+            ].filter(Boolean).map((s,i)=>h('div',{key:i},
+              h('div',{className:'doc-stat-num',style:{color:accent}},s.n),
+              h('div',{className:'doc-stat-label'},s.l)))),
           h('div',{style:{display:'flex',gap:'1rem',flexWrap:'wrap'}},
             h('a',{href:'#booking-section',className:'btn',
               style:{background:accent,color:'white',boxShadow:`0 4px 12px ${accent}33`}},
