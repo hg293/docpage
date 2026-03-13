@@ -1,7 +1,14 @@
 {
-  "buildCommand": "",
+  "buildCommand": "npm install --prefix api",
   "outputDirectory": "public",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
+    { "source": "/api/generate", "destination": "/api/generate.js" },
+    { "source": "/api/parse-resume", "destination": "/api/parse-resume.js" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
